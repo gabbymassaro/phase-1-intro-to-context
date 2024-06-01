@@ -11,4 +11,13 @@ function createEmployeeRecord(employee) {
   return obj
 }
 
-createEmployeeRecord(["Gray", "Worm", "Security", 1])
+function createEmployeeRecords(employeeData) {
+  const employeeRecords = []
+
+  employeeData.forEach(employee => {
+    const record = createEmployeeRecord(employee)
+    employeeRecords.push(record)
+  })
+
+  return employeeRecords
+}
