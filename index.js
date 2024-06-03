@@ -36,6 +36,7 @@ function createTimeOutEvent(employeeRecord, dateStamp) {
     date: dateStamp.slice(0,10)
   }
   employeeRecord.timeOutEvents.push(timeOut)
+
   return employeeRecord
 }
 
@@ -44,30 +45,68 @@ function hoursWorkedOnDate (employeeRecord, date) {
   const endTimeOutEvent = employeeRecord.timeOutEvents.find(timeOutEvent => timeOutEvent.date === date);
   const startTime = startTimeInEvent.hour
   const endTime = endTimeOutEvent.hour
-  const hoursWorked = (Math.abs(startTime - endTime) / 100)
-  return hoursWorked
+
+  return (Math.abs(startTime - endTime) / 100)
 }
 
 function wagesEarnedOnDate (employeeRecord, date) {
-  const payrate = employee.payPerHour
-  const wages = (hoursWorked * payrate)
-  return wages
+  const payPerHour = employeeRecord.payPerHour
+
+  return payPerHour * hoursWorkedOnDate(employeeRecord, date)
 }
 
 function allWagesFor (employeeRecord) {
-  let totalWages = 0;
-  employeeRecord.timeInEvents.forEach(event => {
-    totalWages += wagesEarnedOnDate(employeeRecord, event.date)
-  })
-  return totalWages
+ let totalWages = 0;
+
+ employeeRecord.timeInEvents.forEach(event => {
+   totalWages += wagesEarnedOnDate(employeeRecord, event.date)
+ })
+ return totalWages
 }
 
+function calculatePayroll (employeeArray) {
+  let payroll = 0
+
+  employeeArray.forEach(function(employeeRecord) {
+    payroll += allWagesFor(employeeRecord)
+  })
+  return payroll
+}
+
+// const employee = createEmployeeRecord(["Julius", "Caesar", "General", 27])
+// const timeInEmployee = createTimeInEvent(employee, "0044-03-15 0900")
+// const timeOutEmployee = createTimeOutEvent(employee, "0044-03-15 1100")
+// const hoursWorked = hoursWorkedOnDate(employee,"0044-03-15")
+// const wagesEarnedOn = wagesEarnedOnDate(employee,"0044-03-15")
+// const allWages = allWagesFor(employee)
 
 
 
-const employee = createEmployeeRecord(["Julius", "Caesar", "General", 27])
-const timeInEmployee = createTimeInEvent(employee, "0044-03-15 0900")
-const timeOutEmployee = createTimeOutEvent(employee, "0044-03-15 1100")
-const hoursWorked = hoursWorkedOnDate(timeOutEmployee,"0044-03-15")
-const wagesEarned = wagesEarnedOnDate(hoursWorked,"0044-03-15")
-allWagesFor(wagesEarned)
+// let rRecord = createEmployeeRecord(["Rafiki", "", "Aide", 10])
+// let sRecord = createEmployeeRecord(["Simba", "", "King", 100])
+
+// let sTimeData = [
+//   ["2019-01-01 0900", "2019-01-01 1300"], // 4 * 100 = 400
+//   ["2019-01-02 1000", "2019-01-02 1300"]  // 3 * 100 = 300 ===> 700 total
+// ]
+
+// let rTimeData = [
+//   ["2019-01-11 0900", "2019-01-11 1300"], // 4 * 10 = 40
+//   ["2019-01-12 1000", "2019-01-12 1300"]  // 3 * 10 = 40 ===> 70 total ||=> 770
+// ]
+
+// sTimeData.forEach(function (d) {
+//   let [dIn, dOut] = d
+//   sRecord = createTimeInEvent(sRecord, dIn)
+//   sRecord = createTimeOutEvent(sRecord, dOut)
+// })
+
+// rTimeData.forEach(function (d, i) {
+//   let [dIn, dOut] = d
+//   rRecord = createTimeInEvent(rRecord, dIn)
+//   rRecord = createTimeOutEvent(rRecord, dOut)
+// })
+
+// let employees = [sRecord, rRecord]
+
+// calculatePayroll(employees)
