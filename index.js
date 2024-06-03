@@ -49,12 +49,18 @@ function hoursWorkedOnDate (employeeRecord, date) {
 }
 
 function wagesEarnedOnDate (employeeRecord, date) {
-  const payRate = employee.payPerHour
-  const wages = (employeeRecord * payRate)
+  const payrate = employee.payPerHour
+  const wages = (hoursWorked * payrate)
   return wages
 }
 
-
+function allWagesFor (employeeRecord) {
+  let totalWages = 0;
+  employeeRecord.timeInEvents.forEach(event => {
+    totalWages += wagesEarnedOnDate(employeeRecord, event.date)
+  })
+  return totalWages
+}
 
 
 
@@ -63,4 +69,5 @@ const employee = createEmployeeRecord(["Julius", "Caesar", "General", 27])
 const timeInEmployee = createTimeInEvent(employee, "0044-03-15 0900")
 const timeOutEmployee = createTimeOutEvent(employee, "0044-03-15 1100")
 const hoursWorked = hoursWorkedOnDate(timeOutEmployee,"0044-03-15")
-const wagesEarnedOn = wagesEarnedOnDate(hoursWorked,"0044-03-15")
+const wagesEarned = wagesEarnedOnDate(hoursWorked,"0044-03-15")
+allWagesFor(wagesEarned)
