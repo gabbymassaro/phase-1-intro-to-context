@@ -30,7 +30,34 @@ function createTimeInEvent(employeeRecord, dateStamp) {
   return employeeRecord
 }
 
+function createTimeOutEvent(employeeRecord, dateStamp) {
+  const timeOut = {
+    type: "TimeOut",
+    hour: parseInt(dateStamp.slice(11,13) + "00"),
+    date: dateStamp.slice(0,10)
+  }
 
-const employee = createEmployeeRecord(["Gabby", "", "", 3])
-const updatedEmployee = createTimeInEvent(employee, "2024-07-07 1230")
-console.log(updatedEmployee)
+  employeeRecord.timeOutEvents.push(timeOut)
+  return employeeRecord
+}
+
+function hoursWorkedOnDate (employeeRecord, date) {
+
+  const startTimeInEvent = employeeRecord.timeInEvents.find(timeInEvent => timeInEvent.date === date);
+  const endTimeOutEvent = employeeRecord.timeOutEvents.find(timeOutEvent => timeOutEvent.date === date);
+
+  const startTime = startTimeInEvent.hour
+  const endTime = endTimeOutEvent.hour
+
+  const hoursWorked = (Math.abs(startTime - endTime) / 100)
+  return hoursWorked
+}
+
+
+
+
+const employee = createEmployeeRecord(["Gabby", "Romanowski", "Dev.", 3])
+const timeInEmployee = createTimeInEvent(employee, "2024-07-07 1230")
+const timeOutEmployee = createTimeOutEvent(employee, "2024-07-07 0530")
+// hoursWorkedOnDate(timeOutEmployee,"2024-07-07")
+// hoursWorkedOnDate(timeOutEmployee,"2024-07-09")
